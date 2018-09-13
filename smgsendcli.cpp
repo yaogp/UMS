@@ -10,6 +10,7 @@
 #include <sstream>
 
 using namespace std;
+//ygp 
 using namespace util;
 
 static bool b_ctrl_c = false;
@@ -86,9 +87,9 @@ void ivr_control_send()
 {
 	cout<<"*********usleep iunit"<<endl;
 	int iunit = st_conf.limit_num;
-	iunit =(int)(1000000/iunit);/*Ã¿Ìõ¶ÌÐÅµÄÎ¢ÃëÊý*/
+	iunit =(int)(1000000/iunit);/*æ¯æ¡çŸ­ä¿¡çš„å¾®ç§’æ•°*/
 	cout<<"*********usleep iunit"<<iunit<<endl;
-	usleep(iunit);/*1Ãë=1000000Î¢Ãë*/
+	usleep(iunit);/*1ç§’=1000000å¾®ç§’*/
 }
 
 
@@ -229,18 +230,22 @@ void httpsms_send(msgSend *sms)
 		string content;content.clear();
 		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &content);
 		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, &process_data);
-		sprintf(postfields,"&SpCode=240546&LoginName=admin1&Password=admin1!&MessageContent=%s&UserNumber=%s&SerialNumber=%s&ScheduleTime=%s&ExtendAccessNum=&f=1", sms->msgData,sms->msisdn,sms->msgSn,sms->scheduleTime);
-		//cout <<"postfields="<<postfields<<endl;					
+		sprintf(postfields,"&SpCode=240546&LoginName=admin1&Password=admin1!&MessageContent=%s&UserNumber=%s&SerialNumber=%s&ScheduleTime=%s&ExtendAccessNum=&f=1", sms->msgData,sms->msisdn,sms->msgSn,sms->scheduleTime);
+
+
+		//cout <<"postfields="<<postfields<<endl;		
+			
 		//lfile->write_log(postfields);
 		curl_easy_setopt(curl, CURLOPT_TIMEOUT, 60);
-    		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, &postfields); // Ö¸¶¨postÄÚÈÝ
-    		curl_easy_setopt(curl, CURLOPT_URL, "http://134.78.4.50:8899/sms/Api/Send.do");   // Ö¸¶¨url
+    		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, &postfields); // æŒ‡å®špostå†…å®¹
+    		curl_easy_setopt(curl, CURLOPT_URL, "http://134.78.4.50:8899/sms/Api/Send.do");   // æŒ‡å®šurl
 
         	res = curl_easy_perform(curl);
 
 			if (res != CURLE_OK)
 			{
-				cout <<"res ="<<res <<endl; 				
+				cout <<"res ="<<res <<endl; 
+				
 				//lfile->write_log("res : " + res);
 				//exit(1);
 				strcpy(sms->status,"99");
@@ -305,7 +310,9 @@ void smg_send(){
 		if(it != rule_dealer.end())
 			{
 			if (socksms_send(&msar[i]) <0)
-				{				
+				{
+
+				
 				lfile->write_log("sock error");
 				//cout <<"sock error"<<endl;
 				exit(1);
@@ -609,7 +616,8 @@ static size_t process_data(void *data, size_t size, size_t nmemb, string &conten
 
 
 int main(int argc, char *argv[])
-{	
+{
+	
 	setlocale(LC_ALL,"Zh_CN.UTF-8");
 	signal(SIGINT, ctrl_c);
 	signal(SIGTERM, ctrl_c);
@@ -621,14 +629,18 @@ int main(int argc, char *argv[])
 	}
 	memset(group_id,0x00,sizeof(group_id));
   strcpy(group_id,argv[1]);
-//  cout<<"group_id="<<group_id<<endl; 
+//  cout<<"group_id="<<group_id<<endl;
+
+ 
   
   DB_connect();
   
   memset(&task_para,0x00,sizeof(task_para));
   get_send_task();
  // cout <<"ygp_1"<<endl; 
-  get_send_conf();
+  get_send_conf();
+
+
 //  cout <<"ygp_2"<<endl;
   load_dealer_code();
 //  cout <<"ygp_3"<<endl;
@@ -642,7 +654,9 @@ int main(int argc, char *argv[])
   int pid=0;
   if((pid=fork()) == 0) {
   bool running = true;
-	while(running){	
+	while(running){
+
+	
 
 		DB_connect();
 
